@@ -4,6 +4,8 @@ from flask import Flask, request, render_template, make_response
 
 from api import wall_list, wall_add, wall_error, wall_clear
 
+import random
+
 
 app = Flask(__name__)
 
@@ -78,6 +80,12 @@ def add_message():
 def delete_messages():
     result = wall_clear() 
     return _convert_to_JSON(result)
+
+# @app.route("/get_lucky_number_from_flask")
+# def lucky_number():
+#     return str(random.randint(1, 100))
+
+
 
 
 if __name__ == "__main__":

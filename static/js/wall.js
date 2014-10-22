@@ -23,6 +23,11 @@ function handleFormSubmit(evt) {
 
     // Reset the message container to be empty
     textArea.val("");
+    $("#message-send").prop('disabled', true);
+    setTimeout(function () {
+        $("#message-send").prop('disabled', false);
+    }, 5000);
+
     
 }
 
@@ -82,6 +87,10 @@ function displayResultStatus(resultMsg) {
         setTimeout(function () {
             $(self).slideUp();
         }, 2000);
+
+
+
+
     });
 }
 
@@ -90,3 +99,8 @@ $('#message-reset').click(function() {
             getMessages();
         });
 });
+
+
+    
+
+
