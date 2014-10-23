@@ -5,6 +5,7 @@ $(document).ready(function () {
 
     $("#message-form").submit(handleFormSubmit);
     getMessages();
+    $("#message-container").empty();
 });
 
 
@@ -31,16 +32,18 @@ function handleFormSubmit(evt) {
     
 }
 
-function getMessages() {
-    $.get("/api/wall/list", function (result) {
-        var msgs = result['messages'];
-        $("#message-container").empty(); 
-        for (var n=0; n<msgs.length; n++) {
-            $("#message-container").prepend("<li class='list-group-item'>" + msgs[n]['message'] + "</li>");
+
+
+// function getMessages() {
+//     $.get("/api/wall/list", function (result) {
+//         var msgs = result['messages'];
+//         $("#message-container").empty(); 
+//         for (var n=0; n<msgs.length; n++) {
+//             $("#message-container").prepend("<li class='list-group-item'>" + msgs[n]['message'] + "</li>");
            
-        }
-    });
-}
+//         }
+//     });
+// }
 
 
 /**
@@ -53,7 +56,10 @@ function addMessage(msg) {
         function (data) {
             console.log("addMessage: ", data);
             displayResultStatus(data.result);
-            getMessages();
+            if (msg) {
+                getMessages(data);
+            }
+            
         }
     );
 
@@ -65,7 +71,12 @@ function addMessage(msg) {
  * site (the message result) and then hide it a moment later.
  */
 function displayResultStatus(resultMsg) {
-    var notificationArea = $("#sent-result");
+    var notificationArea;
+    if (resultMsg === "Message Received") {
+        notificationArea = $("#sent-result");}
+    else
+        {
+        notificationArea = $("#sent-fail");}
     notificationArea.text(resultMsg);
     notificationArea.slideDown(function () {
         // In JavaScript, "this" is a keyword that means "the object this
@@ -94,9 +105,18 @@ function displayResultStatus(resultMsg) {
     });
 }
 
+function getMessages(data) {
+    $.get("/api/wall/last", function(data){
+        $("#message-container").prepend("<li class='list-group-item'>" + data + "</li>");
+    });
+}
+
+
+
 $('#message-reset').click(function() {
         $.get("/api/wall/delete", function(result) {
-            getMessages();
+            $("#message-container").empty();
+            getMessages(result);
         });
 });
 

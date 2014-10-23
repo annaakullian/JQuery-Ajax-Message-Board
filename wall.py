@@ -2,9 +2,11 @@ import json
 
 from flask import Flask, request, render_template, make_response
 
-from api import wall_list, wall_add, wall_error, wall_clear
+from api import wall_list, wall_add, wall_error, wall_clear, wall_last
 
 import random
+
+
 
 
 app = Flask(__name__)
@@ -79,6 +81,11 @@ def add_message():
 @app.route("/api/wall/delete")
 def delete_messages():
     result = wall_clear() 
+    return _convert_to_JSON(result)
+
+@app.route("/api/wall/last")
+def add_last():
+    result = wall_last()
     return _convert_to_JSON(result)
 
 # @app.route("/get_lucky_number_from_flask")
